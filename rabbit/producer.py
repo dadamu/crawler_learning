@@ -24,6 +24,7 @@ class Producer():
             current = current + datetime.timedelta(days=1)
 
 
+# setting rabbitmq connection
 credentials = pika.PlainCredentials(
     os.getenv('USERNAME'), os.getenv('PASSWORD'))
 connection = pika.BlockingConnection(
@@ -35,5 +36,6 @@ channel.queue_declare(queue='crawl_stock')
 start = datetime.date(2013, 1, 2)
 end = datetime.date(2013, 2, 10)
 
+# start producer
 p = Producer(channel, start_date=start, end_date=end)
 p.run()

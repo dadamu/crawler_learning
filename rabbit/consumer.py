@@ -19,6 +19,7 @@ class Consumer():
         print(body.decode('ascii'))
         time.sleep(2)
 
+# setting rabbitmq connection
 credentials = pika.PlainCredentials(
     os.getenv('USERNAME'), os.getenv('PASSWORD'))
 connection = pika.BlockingConnection(
@@ -27,5 +28,6 @@ connection = pika.BlockingConnection(
 channel = connection.channel()
 channel.queue_declare(queue='crawl_stock')
 
+# start consumer
 c = Consumer(channel)
 c.run()
