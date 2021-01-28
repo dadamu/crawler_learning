@@ -11,14 +11,15 @@ class Consumer():
 
     def run(self):
         self.channel.basic_consume(queue='crawl_stock',
-                    auto_ack=True,
+                    auto_ack=False,
                     on_message_callback=self.consume)
-        channel.basic_qos(prefetch_count=1)
         self.channel.start_consuming()
     
     def consume(self, ch, method, properties, body):
         print(body.decode('ascii'))
         time.sleep(2)
+        ch.basic_ack(delivery_tag = method.delivery_tag)
+
 
 # setting rabbitmq connection
 credentials = pika.PlainCredentials(
@@ -28,6 +29,7 @@ connection = pika.BlockingConnection(
 
 channel = connection.channel()
 channel.queue_declare(queue='crawl_stock')
+channel.basic_qos(prefetch_count=1)
 
 # start consumer
 c = Consumer(channel)
