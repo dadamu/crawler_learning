@@ -13,6 +13,7 @@ class Consumer():
         self.channel.basic_consume(queue='crawl_stock',
                     auto_ack=True,
                     on_message_callback=self.consume)
+        channel.basic_qos(prefetch_count=1)
         self.channel.start_consuming()
     
     def consume(self, ch, method, properties, body):
